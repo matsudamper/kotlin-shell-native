@@ -23,10 +23,6 @@ graalvmNative {
     }
 }
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     testImplementation(kotlin("test"))
 }
