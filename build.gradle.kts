@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.7.21"
-    id("org.graalvm.buildtools.native") version "0.9.18"
+    id("org.graalvm.buildtools.native") version "0.9.19"
     application
 }
 
