@@ -26,7 +26,7 @@ jobs:
           components: 'native-image'
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - run: ./gradlew nativeCompile
-  macoso:
+  macos:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
