@@ -11,3 +11,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "kotlin-shell-native"
+include("lib")
