@@ -1,17 +1,17 @@
 package command
 
-class CommandExecutor private constructor(
+public class CommandExecutor private constructor(
     private val commands: List<Command>,
     private val parentCommand: Command?,
     private val parentExecutor: CommandExecutor?,
 ) {
-    constructor(commands: List<Command>) : this(
+    public constructor(commands: List<Command>) : this(
         commands = commands,
         parentCommand = null,
         parentExecutor = null
     )
 
-    fun exec(arguments: List<String>) {
+    public fun exec(arguments: List<String>) {
         val firstArgument = arguments.firstOrNull { it.isNotBlank() }
         val remainingArguments = arguments.drop(1)
         if (firstArgument == null) {

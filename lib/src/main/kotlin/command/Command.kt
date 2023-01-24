@@ -1,14 +1,14 @@
 package command
 
-sealed interface Command {
-    val names: List<String>
-    val help: String
+public sealed interface Command {
+    public val names: List<String>
+    public val help: String
 }
 
-interface ExecutableCommand : Command {
-    fun exec(arguments: List<String>)
+public interface ExecutableCommand : Command {
+    public fun exec(arguments: List<String>)
 }
 
-interface NestedHostCommand : Command {
-    val subCommands: List<Command>
+public interface NestedHostCommand : Command {
+    public val subCommands: List<Command>
 }
