@@ -25,6 +25,14 @@ tasks.getByName<Test>("test") {
 }
 
 publishing {
+    publications {
+        create<MavenPublication>("GitHubPackages") {
+            groupId = "net.matsudamper"
+            artifactId = "command"
+            version = project.version.toString()
+            from(components["java"])
+        }
+    }
     repositories {
         maven {
             name = "GitHubPackages"
