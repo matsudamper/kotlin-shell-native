@@ -60,6 +60,6 @@ jobs:
           components: 'native-image'
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - run: |
-          ./gradlew lib:publishToMaven
+          ./gradlew lib:publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
