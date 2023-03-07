@@ -4,7 +4,7 @@ on:
     branch: [main]
 
 jobs:
-  build:
+  build_and_test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -13,9 +13,8 @@ jobs:
           version: 'latest'
           java-version: '17'
           components: 'native-image'
-          github-token: ${{ secrets.GITHUB_TOKEN }}
       - run: ./gradlew test
-  windows:
+  windows-compile:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
@@ -24,9 +23,8 @@ jobs:
           version: 'latest'
           java-version: '17'
           components: 'native-image'
-          github-token: ${{ secrets.GITHUB_TOKEN }}
       - run: ./gradlew nativeCompile
-  ubuntu:
+  ubuntu-compile:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -35,9 +33,19 @@ jobs:
           version: 'latest'
           java-version: '17'
           components: 'native-image'
-          github-token: ${{ secrets.GITHUB_TOKEN }}
       - run: ./gradlew nativeCompile
-  macos:
+  macos-compile:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          version: 'latest'
+          java-version: '17'
+          components: 'native-image'
+      - run: ./gradlew nativeCompile
+
+  publish:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
@@ -47,4 +55,5 @@ jobs:
           java-version: '17'
           components: 'native-image'
           github-token: ${{ secrets.GITHUB_TOKEN }}
-      - run: ./gradlew nativeCompile
+      - run: |
+          ./gradlew lib:publishToMaven

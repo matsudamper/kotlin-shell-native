@@ -2,7 +2,11 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm")
+    id("maven-publish")
 }
+
+group = "net.matsudamper.command"
+version = "1.0"
 
 dependencies {
     testImplementation(kotlin("test"))
@@ -18,4 +22,17 @@ tasks.withType<KotlinCompile> {
 
 tasks.getByName<Test>("test") {
     useJUnitPlatform()
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/matsudamper/kotlin-shell-native")
+            credentials {
+                username = "matsudamper"
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
 }
