@@ -24,6 +24,10 @@ tasks.getByName<Test>("test") {
     useJUnitPlatform()
 }
 
+java {
+    withSourcesJar()
+}
+
 publishing {
     publications {
         create<MavenPublication>("GitHubPackages") {
