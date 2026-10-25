@@ -17,7 +17,10 @@ jobs:
           java-version: '17'
           components: 'native-image'
           github-token: ${{ secrets.GITHUB_TOKEN }}
+      # --continue: 1 つの配布先で失敗しても残りの配布先へのアップロードは続ける
       - run: |
-          ./gradlew lib:publish
+          ./gradlew --continue lib:publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MAVEN_MATSUDAMPER_USERNAME: ${{ secrets.MAVEN_MATSUDAMPER_USERNAME }}
+          MAVEN_MATSUDAMPER_TOKEN: ${{ secrets.MAVEN_MATSUDAMPER_TOKEN }}
