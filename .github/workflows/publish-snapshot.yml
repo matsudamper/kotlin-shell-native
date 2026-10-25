@@ -1,4 +1,6 @@
-name: publish
+name: Publish snapshot
+
+# main: gradle.properties の latest-SNAPSHOT を上書き公開
 on:
   push:
     branches: [main]
@@ -8,6 +10,7 @@ permissions:
 
 jobs:
   publish:
+    name: GitHub Packages へ公開
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -16,10 +19,6 @@ jobs:
           java-version: '17'
           distribution: 'graalvm-community'
           github-token: ${{ secrets.GITHUB_TOKEN }}
-      # --continue: 1 つの配布先で失敗しても残りの配布先へのアップロードは続ける
-      - run: |
-          ./gradlew --continue lib:publish
+      - run: ./gradlew lib:publishAllPublicationsToGitHubPackagesRepository
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MAVEN_MATSUDAMPER_USERNAME: ${{ secrets.MAVEN_MATSUDAMPER_USERNAME }}
-          MAVEN_MATSUDAMPER_TOKEN: ${{ secrets.MAVEN_MATSUDAMPER_TOKEN }}
