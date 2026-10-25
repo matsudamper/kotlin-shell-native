@@ -46,5 +46,13 @@ publishing {
                 password = System.getenv("GITHUB_TOKEN")
             }
         }
+        maven {
+            name = "MatsudamperMaven"
+            url = uri("https://maven.matsudamper.net/releases")
+            credentials {
+                username = System.getenv("MAVEN_MATSUDAMPER_USERNAME")
+                password = System.getenv("MAVEN_MATSUDAMPER_TOKEN")
+            }
+        }
     }
 }
