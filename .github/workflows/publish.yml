@@ -1,7 +1,7 @@
 name: publish
 on:
   push:
-    branch: [main]
+    branches: [main]
 
 permissions:
   packages: write
@@ -13,9 +13,8 @@ jobs:
       - uses: actions/checkout@v3
       - uses: graalvm/setup-graalvm@v1
         with:
-          version: 'latest'
           java-version: '17'
-          components: 'native-image'
+          distribution: 'graalvm-community'
           github-token: ${{ secrets.GITHUB_TOKEN }}
       # --continue: 1 つの配布先で失敗しても残りの配布先へのアップロードは続ける
       - run: |
