@@ -6,7 +6,6 @@ plugins {
 }
 
 group = "net.matsudamper.command"
-version = "1.0.1"
 
 dependencies {
     testImplementation(kotlin("test"))

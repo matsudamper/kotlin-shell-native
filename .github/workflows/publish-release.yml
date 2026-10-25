@@ -1,0 +1,67 @@
+name: Publish release
+
+# 正式版: 手動実行で指定したバージョンを公開し、成功したら GitHub Release + v タグを作る
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "リリースするバージョン（例: 1.0.2）"
+        required: true
+        type: string
+      make_latest:
+        description: "Latest リリースにする"
+        required: true
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  publish:
+    name: リリースと Maven リポジトリへの公開
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '17'
+          distribution: 'graalvm-community'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: バージョンを決める
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          set -euo pipefail
+          version="${INPUT_VERSION#v}"
+          if ! [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
+            echo "::error::version は 1.0.2 のような形式で指定してください（先頭の v は省略可）: $INPUT_VERSION"
+            exit 1
+          fi
+          echo "VERSION=$version" >> "$GITHUB_ENV"
+          echo "TAG=v$version" >> "$GITHUB_ENV"
+          echo "::notice::公開するバージョン: $version"
+
+      - name: publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MAVEN_MATSUDAMPER_USERNAME: ${{ secrets.MAVEN_MATSUDAMPER_USERNAME }}
+          MAVEN_MATSUDAMPER_TOKEN: ${{ secrets.MAVEN_MATSUDAMPER_TOKEN }}
+        # --continue: 1 つの配布先で失敗しても残りの配布先へのアップロードは続ける（ステップは失敗扱いになり Release は作らない）
+        run: ./gradlew --continue lib:publish -Pversion="$VERSION"
+
+      - name: GitHub Release を作成
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MAKE_LATEST: ${{ inputs.make_latest }}
+        run: |
+          set -euo pipefail
+          args=(release create "$TAG" --target "$GITHUB_SHA" --title "$TAG")
+          if [ "$MAKE_LATEST" = "true" ]; then
+            args+=(--generate-notes --latest)
+          else
+            args+=(--latest=false)
+          fi
+          gh "${args[@]}"
